@@ -24,7 +24,7 @@
     }
     .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
     header { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-    .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: .2px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing:.2px; }
     .logo-mark { width:36px; height:36px; border-radius:10px; background:linear-gradient(135deg,var(--brand) 0%,var(--brand-2) 100%); display:grid; place-items:center; color:#061019; font-weight:800; }
     .pill { padding: 6px 10px; border-radius: 999px; background: rgba(148,163,184,.14); color: var(--muted); font-size: 12px; }
 
@@ -151,7 +151,7 @@
               </div>
             </div>
 
-            <!-- Replaced website field with Instagram follow note -->
+            <!-- Follow note + "how did you hear" -->
             <div class="grid-2">
               <div>
                 <p style="margin:0; font-size:14px; color:#95a3b4;">
@@ -166,4 +166,103 @@
                 <select id="heard" name="heard">
                   <option value="">Select…</option>
                   <option>Friend / Referral</option>
-                  <option>Supply Store Flyer</option
+                  <option>Supply Store Flyer</option>
+                  <option>Instagram</option>
+                  <option>TikTok</option>
+                  <option>LinkedIn</option>
+                  <option>Search</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label for="notes">Notes (specialties, license #, etc.)</label>
+              <textarea id="notes" name="notes" placeholder="e.g., Commercial TI, licensed E200, 10+ yrs"></textarea>
+            </div>
+
+            <div style="display:flex; align-items:flex-start; gap:10px;">
+              <input type="checkbox" id="agree" name="agree" value="true" required />
+              <label for="agree" style="margin-top: 2px;">I agree to be contacted about ProFoundr and understand early signups may receive a free trial at launch.</label>
+            </div>
+
+            <div class="cta">
+              <button class="primary" id="submitBtn" type="submit">Join the Waitlist</button>
+              <span id="status" class="sub"></span>
+            </div>
+
+            <!-- Hidden / programmatic fields -->
+            <input type="text" id="website2" name="website2" aria-hidden="true" tabindex="-1" style="position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden;" />
+            <input type="hidden" id="source" name="source" />
+            <input type="hidden" id="timestamp" name="timestamp" />
+          </form>
+
+          <div id="success" class="success" style="display:none; margin-top:10px;">Thanks! You’re on the list. Check your email for confirmation.</div>
+          <div id="error" class="error" style="display:none; margin-top:10px;">Something went wrong. Please try again or email hello@profoundr.app.</div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div>© <span id="year"></span> ProFoundr • Built by contractors, for contractors</div>
+      <div class="pill">Have questions? <a href="mailto:hello@profoundr.app" style="color:#a5b4fc; text-decoration:underline;">hello@profoundr.app</a></div>
+    </footer>
+  </div>
+
+  <script>
+    const APPS_SCRIPT_ENDPOINT = "https://script.google.com/macros/s/AKfycbz-YttAD1BeGxkDIlPjksO3lprduLMRfy2rNO8PhX1xHgI3Vu7Tye0XKvGqvAMwlVp4/exec";
+    const $ = s => document.querySelector(s);
+    const form = $("#waitlist-form");
+    const statusEl = $("#status");
+    const successEl = $("#success");
+    const errorEl = $("#error");
+    const submitBtn = $("#submitBtn");
+    const iframe = $("#hidden_iframe");
+    let justSubmitted = false;
+
+    $("#year").textContent = new Date().getFullYear();
+
+    // Prefill source + timestamp
+    const params = new URLSearchParams(location.search);
+    $("#source").value = params.get("utm_source") || "direct";
+    $("#timestamp").value = new Date().toISOString();
+
+    document.addEventListener("DOMContentLoaded", () => { form.action = APPS_SCRIPT_ENDPOINT; });
+
+    iframe.addEventListener("load", () => {
+      if (!justSubmitted) return;
+      justSubmitted = false;
+      successEl.style.display = "block";
+      errorEl.style.display = "none";
+      statusEl.textContent = "";
+      submitBtn.disabled = false;
+      form.reset();
+    });
+
+    form.addEventListener("submit", (e) => {
+      if (!form.reportValidity()) { e.preventDefault(); return; }
+      successEl.style.display = "none";
+      errorEl.style.display = "none";
+      submitBtn.disabled = true;
+      statusEl.textContent = "Submitting…";
+      justSubmitted = true;
+      // allow native POST to hidden iframe
+    });
+  </script>
+
+  <!--
+    README: Apps Script handler (form-encoded)
+    function doPost(e) {
+      try {
+        var p = e && e.parameter ? e.parameter : {};
+        if (p.website2) return ContentService.createTextOutput(JSON.stringify({ ok: true })).setMimeType(ContentService.MimeType.JSON);
+        var sheet = SpreadsheetApp.getActive().getSheetByName('Sheet1');
+        sheet.appendRow([ new Date(), p.fullName||'', p.company||'', p.email||'', p.phone||'', p.trade||'', p.city||'', p.heard||'', p.notes||'', (String(p.agree||'').toLowerCase()==='true')?'TRUE':'FALSE', p.source||'' ]);
+        return ContentService.createTextOutput(JSON.stringify({ ok: true })).setMimeType(ContentService.MimeType.JSON);
+      } catch (err) {
+        return ContentService.createTextOutput(JSON.stringify({ ok: false, error: String(err) })).setMimeType(ContentService.MimeType.JSON);
+      }
+    }
+  -->
+</body>
+</html>
