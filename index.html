@@ -9,74 +9,59 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg: #0b0f14;
-      --card: #121824;
-      --muted: #95a3b4;
-      --text: #e9eef5;
-      --brand: #22c55e; /* green */
-      --brand-2: #3b82f6; /* blue */
-      --danger: #ef4444;
-    }
+    :root { --bg:#0b0f14; --card:#121824; --muted:#95a3b4; --text:#e9eef5; --brand:#22c55e; --brand-2:#3b82f6; --danger:#ef4444; }
     * { box-sizing: border-box; }
     html,body { height: 100%; }
     body {
       margin: 0;
       font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      background: radial-gradient(1200px 800px at 80% -10%, rgba(59,130,246,.15), transparent 60%),
-                  radial-gradient(1000px 600px at -10% 10%, rgba(34,197,94,.12), transparent 60%),
-                  var(--bg);
+      background:
+        radial-gradient(1200px 800px at 80% -10%, rgba(59,130,246,.15), transparent 60%),
+        radial-gradient(1000px 600px at -10% 10%, rgba(34,197,94,.12), transparent 60%),
+        var(--bg);
       color: var(--text);
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
     }
     .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
     header { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-    .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing:.2px; }
-    .logo-mark {
-      width: 36px; height: 36px; border-radius: 10px;
-      background: linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 100%);
-      display:grid; place-items:center; color:#061019; font-weight:800;
-    }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: .2px; }
+    .logo-mark { width:36px; height:36px; border-radius:10px; background:linear-gradient(135deg,var(--brand) 0%,var(--brand-2) 100%); display:grid; place-items:center; color:#061019; font-weight:800; }
     .pill { padding: 6px 10px; border-radius: 999px; background: rgba(148,163,184,.14); color: var(--muted); font-size: 12px; }
 
     .hero { display:grid; grid-template-columns: 1.1fr 1fr; gap: 32px; align-items:center; margin-top: 40px; }
-    .hero h1 { font-size: clamp(32px, 4.2vw, 54px); line-height: 1.05; margin: 8px 0 14px; }
-    .hero p { font-size: 18px; color: var(--muted); margin: 0 0 16px; }
-    .card { background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border: 1px solid rgba(148,163,184,.16); border-radius: 18px; box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+    .hero h1 { font-size: clamp(32px, 4.2vw, 54px); line-height:1.05; margin:8px 0 14px; }
+    .hero p { font-size: 18px; color: var(--muted); margin:0 0 16px; }
+
+    .card { background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid rgba(148,163,184,.16); border-radius:18px; box-shadow:0 10px 30px rgba(0,0,0,.35); }
     .card-inner { padding: 22px; }
-    .benefits { display:grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 12px; }
-    .benefit { background: rgba(255,255,255,.03); border: 1px solid rgba(148,163,184,.12); border-radius: 14px; padding: 14px; }
-    .benefit h4 { margin: 0 0 6px; font-size: 15px; }
-    .benefit p { margin: 0; color: var(--muted); font-size: 14px; }
 
-    form { display:grid; gap: 12px; }
-    .grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    label { font-size: 13px; color: var(--muted); }
+    .benefits { display:grid; grid-template-columns: repeat(3,1fr); gap:16px; margin-top:12px; }
+    .benefit { background: rgba(255,255,255,.03); border:1px solid rgba(148,163,184,.12); border-radius:14px; padding:14px; }
+    .benefit h4 { margin:0 0 6px; font-size:15px; }
+    .benefit p { margin:0; color:var(--muted); font-size:14px; }
+
+    form { display:grid; gap:12px; }
+    .grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+    label { font-size:13px; color:var(--muted); }
     input, select, textarea {
-      width: 100%; padding: 12px 12px; font: inherit; color: var(--text);
-      background: #0f1520; border: 1px solid rgba(148,163,184,.18); border-radius: 12px; outline: none;
+      width:100%; padding:12px 12px; font:inherit; color:var(--text);
+      background:#0f1520; border:1px solid rgba(148,163,184,.18); border-radius:12px; outline:none;
     }
-    input::placeholder, textarea::placeholder { color: #6b7a8f; }
-    textarea { min-height: 96px; resize: vertical; }
-    .cta { display:flex; align-items:center; gap: 12px; }
-    button.primary {
-      appearance: none; border: none; cursor: pointer; font-weight: 700;
-      padding: 12px 16px; border-radius: 12px; color: #061019;
-      background: linear-gradient(135deg, var(--brand), var(--brand-2));
-      box-shadow: 0 8px 22px rgba(34,197,94,.25), 0 4px 12px rgba(59,130,246,.18);
-    }
-    .sub { font-size: 13px; color: var(--muted); }
-    .error { color: var(--danger); font-size: 13px; }
-    .success { color: #22c55e; font-size: 14px; font-weight: 600; }
+    input::placeholder, textarea::placeholder { color:#6b7a8f; }
+    textarea { min-height:96px; resize:vertical; }
+    .cta { display:flex; align-items:center; gap:12px; }
+    button.primary { appearance:none; border:none; cursor:pointer; font-weight:700; padding:12px 16px; border-radius:12px; color:#061019; background:linear-gradient(135deg,var(--brand),var(--brand-2)); box-shadow:0 8px 22px rgba(34,197,94,.25),0 4px 12px rgba(59,130,246,.18); }
+    .sub { font-size:13px; color:var(--muted); }
+    .error { color:var(--danger); font-size:13px; }
+    .success { color:#22c55e; font-size:14px; font-weight:600; }
 
-    footer { margin: 28px 0 8px; color: var(--muted); font-size: 13px; display:flex; align-items:center; justify-content:space-between; gap: 12px; flex-wrap:wrap; }
-    .badge { padding: 6px 10px; border-radius: 999px; border:1px dashed rgba(34,197,94,.45); color:#a4f3c5; background: rgba(34,197,94,.08); font-size: 12px; }
+    footer { margin:28px 0 8px; color:var(--muted); font-size:13px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+    .badge { padding:6px 10px; border-radius:999px; border:1px dashed rgba(34,197,94,.45); color:#a4f3c5; background:rgba(34,197,94,.08); font-size:12px; }
 
     @media (max-width: 900px) {
-      .hero { grid-template-columns: 1fr; }
-      .benefits { grid-template-columns: 1fr; }
-      .grid-2 { grid-template-columns: 1fr; }
+      .hero { grid-template-columns:1fr; }
+      .benefits { grid-template-columns:1fr; }
+      .grid-2 { grid-template-columns:1fr; }
     }
   </style>
 </head>
@@ -116,7 +101,11 @@
         <div class="card-inner">
           <h3 style="margin-top:0">Join the Contractor Waitlist</h3>
           <p class="sub" style="margin-top:2px">We’ll confirm by email and reserve your spot.</p>
-          <form id="waitlist-form" novalidate>
+
+          <!-- Hidden iframe to avoid CORS and keep page in place -->
+          <iframe id="hidden_iframe" name="hidden_iframe" style="display:none;"></iframe>
+
+          <form id="waitlist-form" method="POST" target="hidden_iframe" novalidate>
             <div class="grid-2">
               <div>
                 <label for="fullName">Full name</label>
@@ -161,216 +150,20 @@
                 <input id="city" name="city" placeholder="Utah Valley, SLC" />
               </div>
             </div>
+
+            <!-- Replaced website field with Instagram follow note -->
             <div class="grid-2">
               <div>
-                <label for="website">Website / Instagram (optional)</label>
-                <input id="website" name="website" placeholder="https://instagram.com/yourcompany" />
+                <p style="margin:0; font-size:14px; color:#95a3b4;">
+                  📲 Follow us on Instagram:
+                  <a href="https://instagram.com/profoundrapp" target="_blank" rel="noopener" style="color:#3b82f6; text-decoration:underline;">
+                    @profoundrapp
+                  </a>
+                </p>
               </div>
               <div>
                 <label for="heard">How did you hear about us?</label>
                 <select id="heard" name="heard">
                   <option value="">Select…</option>
                   <option>Friend / Referral</option>
-                  <option>Supply Store Flyer</option>
-                  <option>Instagram</option>
-                  <option>TikTok</option>
-                  <option>LinkedIn</option>
-                  <option>Search</option>
-                  <option>Other</option>
-                </select>
-              </div>
-            </div>
-            <div>
-              <label for="notes">Notes (specialties, license #, etc.)</label>
-              <textarea id="notes" name="notes" placeholder="e.g., Commercial TI, licensed E200, 10+ yrs"></textarea>
-            </div>
-
-            <div style="display:flex; align-items:flex-start; gap:10px;">
-              <input type="checkbox" id="agree" required />
-              <label for="agree" style="margin-top: 2px;">I agree to be contacted about ProFoundr and understand early signups may receive a free trial at launch.</label>
-            </div>
-
-            <div class="cta">
-              <button class="primary" id="submitBtn" type="submit">Join the Waitlist</button>
-              <span id="status" class="sub"></span>
-            </div>
-
-            <!-- Hidden / programmatic fields -->
-            <input type="hidden" id="source" name="source" />
-            <input type="hidden" id="timestamp" name="timestamp" />
-          </form>
-          <div id="success" class="success" style="display:none; margin-top:10px;">Thanks! You’re on the list. Check your email for confirmation.</div>
-          <div id="error" class="error" style="display:none; margin-top:10px;">Something went wrong. Please try again or email hello@profoundr.app.</div>
-        </div>
-      </div>
-    </section>
-
-    <footer>
-      <div>© <span id="year"></span> ProFoundr • Built by contractors, for contractors</div>
-      <div class="pill">Have questions? <a href="#" style="color:#a5b4fc; text-decoration:underline;">hello@profoundr.app</a></div>
-    </footer>
-  </div>
-
-  <script>
-    // ====== QUICK START (choose ONE destination and paste its URL) ======
-    // 1) FORM ENDPOINT — Google Sheets (Apps Script Web App)  
-    //    Follow the README steps below to create a Web App that accepts JSON POST and logs to a Sheet.  
-    const APPS_SCRIPT_ENDPOINT = "https://script.google.com/macros/s/AKfycbz-YttAD1BeGxkDIlPjksO3lprduLMRfy2rNO8PhX1xHgI3Vu7Tye0XKvGqvAMwlVp4/exec"; // e.g., https://script.google.com/macros/s/AKfycb.../exec
-
-    // 2) or FORM ENDPOINT — Formspree (no-code inbox/forwarder)  
-    //    Create a Formspree form and paste the endpoint URL here:  
-    const FORMSPREE_ENDPOINT = ""; // e.g., https://formspree.io/f/abcdwxyz
-
-    // The script will try Apps Script first, then fall back to Formspree if set.
-
-    // ====== UTILITIES ======
-    const $ = s => document.querySelector(s);
-    const form = $("#waitlist-form");
-    const statusEl = $("#status");
-    const successEl = $("#success");
-    const errorEl = $("#error");
-    const submitBtn = $("#submitBtn");
-    $("#year").textContent = new Date().getFullYear();
-
-    // Add source + timestamp
-    const params = new URLSearchParams(location.search);
-    $("#source").value = params.get("utm_source") || "direct";
-    $("#timestamp").value = new Date().toISOString();
-
-    async function postJSON(url, data) {
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      return await res.json().catch(() => ({}));
-    }
-
-    async function submitToFirstAvailable(data) {
-      const targets = [APPS_SCRIPT_ENDPOINT, FORMSPREE_ENDPOINT].filter(Boolean);
-      if (targets.length === 0) throw new Error("No endpoint configured");
-      let lastErr;
-      for (const url of targets) {
-        try { return await postJSON(url, data); } catch (e) { lastErr = e; }
-      }
-      throw lastErr || new Error("All endpoints failed");
-    }
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      successEl.style.display = "none";
-      errorEl.style.display = "none";
-
-      if (!form.reportValidity()) return;
-
-      submitBtn.disabled = true;
-      statusEl.textContent = "Submitting…";
-
-      const payload = {
-        fullName: $("#fullName").value.trim(),
-        company: $("#company").value.trim(),
-        email: $("#email").value.trim(),
-        phone: $("#phone").value.trim(),
-        trade: $("#trade").value,
-        city: $("#city").value.trim(),
-        website: $("#website").value.trim(),
-        heard: $("#heard").value,
-        notes: $("#notes").value.trim(),
-        agree: $("#agree").checked,
-        source: $("#source").value,
-        timestamp: $("#timestamp").value
-      };
-
-      try {
-        await submitToFirstAvailable(payload);
-        form.reset();
-        successEl.style.display = "block";
-      } catch (err) {
-        console.error(err);
-        errorEl.style.display = "block";
-      } finally {
-        statusEl.textContent = "";
-        submitBtn.disabled = false;
-      }
-    });
-  </script>
-
-  <!--
-    ===================== README (INLINE) =====================
-
-    OPTION A — Google Sheets (Free CRM)
-    -----------------------------------
-    1) Create a Google Sheet with columns (Row 1 headers):
-       timestamp, fullName, company, email, phone, trade, city, website, heard, notes, agree, source
-    2) Extensions → Apps Script → paste this code:
-
-    function doPost(e) {
-      try {
-        var body = JSON.parse(e.postData.contents);
-        var sheet = SpreadsheetApp.getActive().getSheetByName('Sheet1');
-        sheet.appendRow([
-          new Date(), body.fullName || '', body.company || '', body.email || '', body.phone || '',
-          body.trade || '', body.city || '', body.website || '', body.heard || '', body.notes || '',
-          body.agree ? 'TRUE' : 'FALSE', body.source || ''
-        ]);
-        return ContentService.createTextOutput(JSON.stringify({ ok: true }))
-          .setMimeType(ContentService.MimeType.JSON);
-      } catch (err) {
-        return ContentService.createTextOutput(JSON.stringify({ ok: false, error: String(err) }))
-          .setMimeType(ContentService.MimeType.JSON);
-      }
-    }
-
-    3) Deploy → New deployment → Type: Web app → Execute as: Me → Who has access: Anyone
-       Copy the Web app URL and paste it into APPS_SCRIPT_ENDPOINT above.
-
-    OPTION B — Formspree
-    ---------------------
-    1) Create a form at formspree.io → get your endpoint URL.
-    2) Paste the endpoint in FORMSPREE_ENDPOINT above.
-    3) In Formspree settings, enable email notifications or forward to Mailchimp/Zapier.
-
-    Importing signups into ProFoundr (MongoDB)
-    -----------------------------------------
-    - Export your Google Sheet as CSV.
-    - Use a one-time script to insert into your contractors collection once user accounts exist.
-      Example Node.js script:
-
-      const fs = require('fs');
-      const { parse } = require('csv-parse/sync');
-      const { MongoClient } = require('mongodb');
-
-      (async () => {
-        const client = new MongoClient(process.env.MONGO_URI);
-        await client.connect();
-        const db = client.db('profoundr');
-        const contractors = db.collection('contractors_waitlist');
-        const csv = fs.readFileSync('waitlist.csv', 'utf8');
-        const rows = parse(csv, { columns: true });
-        const docs = rows.map(r => ({
-          createdAt: new Date(r.timestamp || Date.now()),
-          name: r.fullName,
-          company: r.company,
-          email: r.email,
-          phone: r.phone,
-          trade: r.trade,
-          city: r.city,
-          website: r.website,
-          heard: r.heard,
-          notes: r.notes,
-          agree: /true/i.test(String(r.agree || '')),
-          source: r.source || 'import'
-        }));
-        if (docs.length) await contractors.insertMany(docs, { ordered: false });
-        console.log(`Imported ${docs.length} records`);
-        await client.close();
-      })();
-
-    Suggested privacy copy (footer / modal)
-    ---------------------------------------
-    "We only use your information to notify you about ProFoundr and set up your account at launch. We never sell your data."
-
-  -->
-</body>
-</html>
+                  <option>Supply Store Flyer</option
