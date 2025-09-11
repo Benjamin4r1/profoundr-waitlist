@@ -102,10 +102,7 @@
           <h3 style="margin-top:0">Join the Contractor Waitlist</h3>
           <p class="sub" style="margin-top:2px">We’ll confirm by email and reserve your spot.</p>
 
-          <!-- Hidden iframe to avoid CORS and keep page in place -->
-          <iframe id="hidden_iframe" name="hidden_iframe" style="display:none;"></iframe>
-
-          <form id="waitlist-form" method="POST" target="hidden_iframe" novalidate>
+          <form id="waitlist-form" novalidate>
             <div class="grid-2">
               <div>
                 <label for="fullName">Full name</label>
@@ -210,16 +207,18 @@
   </div>
 
   <script>
-    const APPS_SCRIPT_ENDPOINT = "https://script.google.com/macros/s/AKfycbz-YttAD1BeGxkDIlPjksO3lprduLMRfy2rNO8PhX1xHgI3Vu7Tye0XKvGqvAMwlVp4/exec";
+    // ====== Apps Script endpoint (your live URL) ======
+    const APPS_SCRIPT_ENDPOINT = "https://script.google.com/macros/s/AKfycbx03Qb1fUpCYuBqz9ZKmLi2l8kvctwo48_srKxGVffkl6Ke3NYAwjhnNwmOaCuOiTObbw/exec";
+
+    // ====== DOM refs ======
     const $ = s => document.querySelector(s);
     const form = $("#waitlist-form");
     const statusEl = $("#status");
     const successEl = $("#success");
     const errorEl = $("#error");
     const submitBtn = $("#submitBtn");
-    const iframe = $("#hidden_iframe");
-    let justSubmitted = false;
 
+    // Footer year
     $("#year").textContent = new Date().getFullYear();
 
     // Prefill source + timestamp
@@ -227,42 +226,78 @@
     $("#source").value = params.get("utm_source") || "direct";
     $("#timestamp").value = new Date().toISOString();
 
-    document.addEventListener("DOMContentLoaded", () => { form.action = APPS_SCRIPT_ENDPOINT; });
-
-    iframe.addEventListener("load", () => {
-      if (!justSubmitted) return;
-      justSubmitted = false;
-      successEl.style.display = "block";
-      errorEl.style.display = "none";
-      statusEl.textContent = "";
-      submitBtn.disabled = false;
-      form.reset();
-    });
-
-    form.addEventListener("submit", (e) => {
-      if (!form.reportValidity()) { e.preventDefault(); return; }
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
       successEl.style.display = "none";
       errorEl.style.display = "none";
+      if (!form.reportValidity()) return;
+
       submitBtn.disabled = true;
       statusEl.textContent = "Submitting…";
-      justSubmitted = true;
-      // allow native POST to hidden iframe
+
+      // Build form-encoded body
+      const formData = new FormData(form);
+      const body = new URLSearchParams(formData); // encodes as application/x-www-form-urlencoded
+
+      try {
+        // Send without CORS headaches; we won't read the response
+        await fetch(APPS_SCRIPT_ENDPOINT, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body
+        });
+
+        form.reset();
+        successEl.style.display = "block";
+      } catch (err) {
+        console.error(err);
+        errorEl.style.display = "block";
+      } finally {
+        statusEl.textContent = "";
+        submitBtn.disabled = false;
+      }
     });
   </script>
 
   <!--
-    README: Apps Script handler (form-encoded)
+    ===================== README (INLINE) =====================
+
+    Google Sheets setup
+    -------------------
+    1) Create a sheet with this header row on Sheet1:
+       timestamp | fullName | company | email | phone | trade | city | heard | notes | agree | source
+
+    Apps Script (paste in Extensions → Apps Script)
+    ----------------------------------------------
     function doPost(e) {
       try {
         var p = e && e.parameter ? e.parameter : {};
-        if (p.website2) return ContentService.createTextOutput(JSON.stringify({ ok: true })).setMimeType(ContentService.MimeType.JSON);
+        if (p.website2) {
+          return ContentService.createTextOutput(JSON.stringify({ ok: true }))
+            .setMimeType(ContentService.MimeType.JSON);
+        }
         var sheet = SpreadsheetApp.getActive().getSheetByName('Sheet1');
-        sheet.appendRow([ new Date(), p.fullName||'', p.company||'', p.email||'', p.phone||'', p.trade||'', p.city||'', p.heard||'', p.notes||'', (String(p.agree||'').toLowerCase()==='true')?'TRUE':'FALSE', p.source||'' ]);
-        return ContentService.createTextOutput(JSON.stringify({ ok: true })).setMimeType(ContentService.MimeType.JSON);
+        sheet.appendRow([
+          new Date(),
+          p.fullName||'', p.company||'', p.email||'', p.phone||'',
+          p.trade||'', p.city||'', p.heard||'', p.notes||'',
+          String(p.agree||'').toLowerCase()==='true' ? 'TRUE' : 'FALSE',
+          p.source||''
+        ]);
+        return ContentService.createTextOutput(JSON.stringify({ ok: true }))
+          .setMimeType(ContentService.MimeType.JSON);
       } catch (err) {
-        return ContentService.createTextOutput(JSON.stringify({ ok: false, error: String(err) })).setMimeType(ContentService.MimeType.JSON);
+        return ContentService.createTextOutput(JSON.stringify({ ok: false, error: String(err) }))
+          .setMimeType(ContentService.MimeType.JSON);
       }
     }
+
+    Deploy as Web App
+    -----------------
+    Deploy → Web app → Execute as: Me → Who has access: Anyone → Deploy
+    Copy the Web App URL into APPS_SCRIPT_ENDPOINT above.
+
   -->
 </body>
 </html>
